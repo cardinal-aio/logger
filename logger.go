@@ -6,17 +6,24 @@ import (
 	"runtime"
 
 	nested "github.com/antonfisher/nested-logrus-formatter"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/sirupsen/logrus"
 )
 
-var Logger *logrus.Logger
+var Logger *_Logger
+
+type _Logger struct {
+	logrus.Logger
+}
 
 func init() {
 	configureLogger()
 }
 
 func configureLogger() {
-	Logger = logrus.New()
+	l := logrus.New()
+	l1 := _Logger{*l}
+	Logger = &l1
 	Logger.SetReportCaller(true)
 	Logger.SetFormatter(&nested.Formatter{
 		HideKeys:      true,
@@ -25,7 +32,11 @@ func configureLogger() {
 		CallerFirst:   true,
 		CustomCallerFormatter: func(f *runtime.Frame) string {
 			filename := path.Base(f.File)
-			return fmt.Sprintf("%s:%d, %s()", filename, f.Line, f.Function)
+			return fmt.Sprintf(" | %s:%d %s()", filename, f.Line, f.Function)
 		},
 	})
+}
+
+func (l *_Logger) SpewDebug(obj any) {
+	Logger.Debug(spew.Sdump(obj))
 }
