@@ -12,9 +12,9 @@ func init() {
 }
 
 func configureLogger() {
-	log := logrus.New()
+	Logger = logrus.New()
 
-	log.SetFormatter(&nested.Formatter{
+	Logger.SetFormatter(&nested.Formatter{
 		HideKeys:      true,
 		ShowFullLevel: true,
 		TrimMessages:  true,
