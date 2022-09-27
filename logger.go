@@ -1,4 +1,4 @@
-package nezukologger
+package logger
 
 import (
 	nested "github.com/antonfisher/nested-logrus-formatter"
